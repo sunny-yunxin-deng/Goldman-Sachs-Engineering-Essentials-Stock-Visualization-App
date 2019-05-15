@@ -26,5 +26,6 @@ public class Company {
     // Define the attributes of a Company based on the
     // provided data in resources/data
 
+
     // TODO - add getter and setter methods for your attributes
 }
