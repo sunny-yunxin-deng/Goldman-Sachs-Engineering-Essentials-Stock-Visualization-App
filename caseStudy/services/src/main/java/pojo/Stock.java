@@ -30,6 +30,10 @@ public class Stock {
 
     private SortedMap<Date, Double> dailyClosePrices;
 
+    public Stock(String name) {
+        this.name = name;
+        this.dailyClosePrices = new TreeMap<Date, Double>();
+    }
     public Stock (String name, SortedMap<Date, Double> dailyClosePrices) {
         this.name = name;
         this.dailyClosePrices = dailyClosePrices;
@@ -54,6 +58,11 @@ public class Stock {
 
     /** For local testing */
     public static void main(String[] args) {
+        System.out.println("Testing");
+        Stock s = new Stock("yo");
+        System.out.println(s.getName());
+        s.setName("changed");
+        System.out.println(s.getName());
     }
     
 }
