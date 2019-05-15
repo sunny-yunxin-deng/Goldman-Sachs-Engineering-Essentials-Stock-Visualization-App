@@ -28,7 +28,7 @@ public class Stock {
     @JsonProperty
     private String name;
     @JsonProperty
-    private List<HashMap<Object, Object>> dailyClosePrice;
+    private List<HashMap<String, Double>> dailyClosePrice;
 
 public Stock() {
 
@@ -37,7 +37,7 @@ public Stock() {
     public String getName () {
         return name;
     }
-    public List<HashMap<Object, Object>> getDailyClosePrice () {
+    public List<HashMap<String, Double>> getDailyClosePrice () {
         return dailyClosePrice;
     }
 
@@ -46,7 +46,7 @@ public Stock() {
         this.name = name;
     }
 
-    public void setDailyClosePrice (List<HashMap<Object, Object>> dailyClosePrice) {
+    public void setDailyClosePrice (List<HashMap<String, Double>> dailyClosePrice) {
         this.dailyClosePrice = dailyClosePrice;
     }
 

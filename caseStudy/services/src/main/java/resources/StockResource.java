@@ -17,6 +17,9 @@
 package resources;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import utility.FileHelper;
@@ -29,11 +32,20 @@ public class StockResource {
     // Your service should return data based on 3 inputs
     // Stock ticker, start date and end date
     @GET
-    @Path("info")
+    @Path("info/{tick}/{startDate}/{endDate}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Stock helloWorld() throws java.io.IOException {
+    public Double getStockData(@PathParam("tick") String tick,
+                              @QueryParam("startDate") String startDate,
+                              @QueryParam("endDate") String endDate) throws java.io.IOException {
+
         List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
-        return stocks.get(0);
+        List<HashMap<String, Double>> dailyClosePrice = new ArrayList<HashMap<String, Double>>();
+        for (Stock stock : stocks) {
+            if(stock.getName().equalsIgnoreCase(tick)) {
+                dailyClosePrice = stock.getDailyClosePrice();
+            }
+        }
+        return dailyClosePrice.get(0).get("4/11/2019");
     }
 }
 
