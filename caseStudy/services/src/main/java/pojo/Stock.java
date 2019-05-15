@@ -16,16 +16,21 @@
 
 package pojo;
 
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.*;
+
 /**
  * This class will define a company's end-of-day stock price
  * Look at resources/data/historicalStockData.json
  */
 public class Stock {
+    @JsonProperty
+    private String name;
 
-    private String name = "";
-    private Sorted Map<String, Double> dailyClosePrices = new TreeMap<String, Double>();
+    private SortedMap<Date, Double> dailyClosePrices;
 
-    public Stock (String name, SortedMap<String, Double> dailyClosePrices) {
+    public Stock (String name, SortedMap<Date, Double> dailyClosePrices) {
         this.name = name;
         this.dailyClosePrices = dailyClosePrices;
     }
@@ -34,7 +39,7 @@ public class Stock {
     public String getName () {
         return name;
     }
-    public Sorted Map<String, Double> getDailyClosePrices () {
+    public SortedMap<Date, Double> getDailyClosePrices () {
         return dailyClosePrices;
     }
 
@@ -42,13 +47,13 @@ public class Stock {
     public void setName (String name) {
         this.name = name;
     }
-    public void getDailyClosePrices (Sorted Map<String, Double> dailyClosePrices) {
+
+    public void setDailyClosePrices (SortedMap<Date, Double> dailyClosePrices) {
         this.dailyClosePrices = dailyClosePrices;
     }
 
     /** For local testing */
     public static void main(String[] args) {
-
     }
     
 }
