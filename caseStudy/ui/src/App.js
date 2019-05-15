@@ -15,41 +15,71 @@
  */
 
 import React from 'react';
+import Select from 'react-select';
+import AsyncSelect from 'react-select/lib/Async';
 import './style/App.css';
-import StockTicker from './components/StockTicker';
-import Date from './components/Date';
+import Charts from './components/Charts.js';
+import Date from './components/Date.js';
+import StockTicker from './components/StockTicker.js';
 
-/**
- * TODO:
- * Import your components
- */
+const tickerList=[
+  "APPL", "AMZN", "GOGL", "TWTR", "FB"
+];
 
-
-class App extends React.Component{
+export default class App extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+            startDate: "",
+            endDate: "",
+            inputValue: ""
             /**
              * TODO
              * Add state objects for the user inputs and anything else you may need to render the highchart.
              */
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.filterTickers = this.filterTickers.bind(this);
+        this.loadTickers = this.loadTickers.bind(this);
     }
+
+    handleInputChange(newValue) {
+      const inputValue = newValue.replace(/\W/g, '');
+      this.setState({ inputValue });
+      return inputValue;
+    };
 
     handleChange(event) {
       const value = event.target.value;
       this.props.onChange(value);
-    }
+    };
+
+    filterTickers(inputValue) {
+      return tickerList.filter(i =>
+        i.label.toLowerCase().includes(inputValue.toLowerCase())
+      );
+    };
+
+    loadTickers(inputValue, callback) {
+      setTimeout(() => {
+        callback(this.filterTickers(inputValue));
+      }, 1000);
+    };
 
     render () {
       return (
           <div className="page-display">
             <h1><strong>Stock Visualization App</strong></h1>
               <div className="input">
-              {
               <StockTicker onChange={this.handleChange} />
-                /**
+              <pre>inputValue: {this.state.inputValue}</pre>
+              <AsyncSelect
+                cacheOptions
+                loadTickers={this.loadTickers}
+                defaultOptions
+                onInputChange={this.handleInputChange} />
+              {/**
                * TODO
                * Render the StockTicker and Date components. You can use the date component twice
                * for both the start and end dates.
@@ -80,5 +110,3 @@ class App extends React.Component{
       );
     }
 }
-
-export default App;
