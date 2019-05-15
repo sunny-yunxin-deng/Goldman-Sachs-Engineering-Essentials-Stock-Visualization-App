@@ -71,6 +71,7 @@ export default class App extends React.Component{
                    *  be maintained as a state object.
                    *  http://reactpatterns.com/#conditional-rendering
                    */}
+                   <Charts />
 
           </div>
       );

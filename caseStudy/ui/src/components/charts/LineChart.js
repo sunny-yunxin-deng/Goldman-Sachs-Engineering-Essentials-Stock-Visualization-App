@@ -20,10 +20,13 @@ import Highcharts from 'highcharts';
 export default class LineChart extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            chart:null
+        }
     }
 
     componentDidMount() {
-        Highcharts.chart('chart', {
+        let chart = Highcharts.chart('chart', {
             chart: {
                 zoomType: 'x'
             },
@@ -78,6 +81,8 @@ export default class LineChart extends React.Component {
                 data: this.props.data
             }]
         });
+
+        this.setState({chart:chart})
 /*        Highcharts.chart('chart', {
 
             TODO
@@ -102,19 +107,17 @@ export default class LineChart extends React.Component {
          * to create the x-axis.
          */
         
-        /**
-         * TODO
-         * Uncomment the line below to pass the data be displayed to the series
-         * this.chart.series[0].setData(data);
-         */
+
+        this.state.chart.series[0].setData(this.props.data);
     }
 
     componentWillUnmount() {
-        this.chart.destroy();
+        this.state.chart.destroy();
     }
 
 
     render() {
+        console.log(this.state.chart)
         return (
             <div id='chart'></div>
         )
