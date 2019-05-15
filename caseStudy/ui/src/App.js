@@ -45,7 +45,7 @@ class App extends React.Component{
     render () {
       return (
           <div className="page-display">
-            <h1>Stock Visualization App</h1>
+            <h1><strong>Stock Visualization App</strong></h1>
               <div className="input">
               {
               <StockTicker onChange={this.handleChange} />
@@ -60,9 +60,9 @@ class App extends React.Component{
                */}
                 <div className="date-range">
                   <Date onChange={this.handleChange} />
-                  <p>Start Date</p>
+                  <p><strong>Start Date</strong></p>
                   <Date onChange={this.handleChange} />
-                  <p>End Date</p>
+                  <p><strong>End Date</strong></p>
                 </div>
               </div>
 
