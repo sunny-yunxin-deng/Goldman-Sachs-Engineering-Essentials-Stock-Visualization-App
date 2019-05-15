@@ -38,17 +38,13 @@ public class FileHelper {
 
 
     public static List<Company> readAllCompanies(String fileName) throws IOException {
-
-        //       InputStream inputStream = new FileInputStream(("data" + File.separatorChar + fileName));
-        InputStream inputStream = new FileInputStream(fileName);
+        InputStream inputStream = new FileInputStream(("src/main/resources/data" + File.separatorChar + fileName));
         return mapper.readValue(inputStream, new TypeReference<List<Company>>() {
         });
     }
 
     public static List<Stock> readAllStocks(String fileName) throws IOException {
-
-        //       InputStream inputStream = new FileInputStream(("data" + File.separatorChar + fileName));
-        InputStream inputStream = new FileInputStream(fileName);
+        InputStream inputStream = new FileInputStream(("src/main/resources/data" + File.separatorChar + fileName));
         return mapper.readValue(inputStream, new TypeReference<List<Stock>>() {
         });
     }

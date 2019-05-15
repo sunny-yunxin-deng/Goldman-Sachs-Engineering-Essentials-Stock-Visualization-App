@@ -27,23 +27,23 @@ import java.util.*;
 public class Stock {
     @JsonProperty
     private String name;
+    @JsonProperty
+    private List<Map<String, Double>> dailyClosePrices;
 
-    private SortedMap<Date, Double> dailyClosePrices;
-
-    public Stock(String name) {
-        this.name = name;
-        this.dailyClosePrices = new TreeMap<Date, Double>();
-    }
-    public Stock (String name, SortedMap<Date, Double> dailyClosePrices) {
-        this.name = name;
-        this.dailyClosePrices = dailyClosePrices;
-    }
+//    public Stock(String name) {
+//        this.name = name;
+//        this.dailyClosePrices = new Object();
+//    }
+//    public Stock (String name, Object dailyClosePrices) {
+//        this.name = name;
+//        this.dailyClosePrices = dailyClosePrices;
+//    }
 
     /** Getters */
     public String getName () {
         return name;
     }
-    public SortedMap<Date, Double> getDailyClosePrices () {
+    public Object getDailyClosePrices () {
         return dailyClosePrices;
     }
 
@@ -52,17 +52,17 @@ public class Stock {
         this.name = name;
     }
 
-    public void setDailyClosePrices (SortedMap<Date, Double> dailyClosePrices) {
+    public void setDailyClosePrices (List<Map<String, Double>> dailyClosePrices) {
         this.dailyClosePrices = dailyClosePrices;
     }
 
     /** For local testing */
     public static void main(String[] args) {
-        System.out.println("Testing");
-        Stock s = new Stock("yo");
-        System.out.println(s.getName());
-        s.setName("changed");
-        System.out.println(s.getName());
+//        System.out.println("Testing");
+//        Stock s = new Stock("yo");
+//        System.out.println(s.getName());
+//        s.setName("changed");
+//        System.out.println(s.getName());
     }
     
 }
