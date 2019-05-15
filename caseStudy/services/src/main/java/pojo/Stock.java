@@ -22,9 +22,33 @@ package pojo;
  */
 public class Stock {
 
-    // TODO - Think back to your modelling session
-    // Define the attributes of a stock price based on the
-    // provided data in resources/data
+    private String name = "";
+    private Sorted Map<String, Double> dailyClosePrices = new TreeMap<String, Double>();
 
-    // TODO - add getter and setter methods for your attributes
+    public Stock (String name, SortedMap<String, Double> dailyClosePrices) {
+        this.name = name;
+        this.dailyClosePrices = dailyClosePrices;
+    }
+
+    /** Getters */
+    public String getName () {
+        return name;
+    }
+    public Sorted Map<String, Double> getDailyClosePrices () {
+        return dailyClosePrices;
+    }
+
+    /** Setters */
+    public void setName (String name) {
+        this.name = name;
+    }
+    public void getDailyClosePrices (Sorted Map<String, Double> dailyClosePrices) {
+        this.dailyClosePrices = dailyClosePrices;
+    }
+
+    /** For local testing */
+    public static void main(String[] args) {
+
+    }
+    
 }
