@@ -15,11 +15,25 @@
 **/
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import '../stylesheet.css';
+import User from './User';
+import Message from './Message';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-);
+function Card(props) {
+  const tagElements = props.tags.map((tag, index) =>
+    <div key={index} className='badge badge-pill' id='tag'>
+      {tag}
+    </div>
+  )
+  return (
+    <div className='card'>
+      <User name={props.author}/>
+      <div className='card-main'>
+        <Message text={props.text}/>
+      </div>
+      {tagElements}
+      {props.dateStamp ?  props.dateStamp.toString() : null}
+    </div>
+  );
+}
+
+export default Card;
