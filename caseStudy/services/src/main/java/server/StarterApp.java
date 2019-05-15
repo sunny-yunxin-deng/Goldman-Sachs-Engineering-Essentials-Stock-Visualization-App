@@ -46,7 +46,7 @@ public class StarterApp extends Application<Configuration> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StarterApp.class);
 
-//    private static Example11SolutionResource restService = new Example11SolutionResource();
+    private static CompanyResource companyRestService = new CompanyResource();
 
     public StarterApp() {
     }
@@ -61,6 +61,7 @@ public class StarterApp extends Application<Configuration> {
         LOGGER.info("Registering REST resources");
         e.jersey().register(new CompanyResource());
         e.jersey().register(new StockResource());
+
         LOGGER.info("Successfully started REST Service.");
     }
 
