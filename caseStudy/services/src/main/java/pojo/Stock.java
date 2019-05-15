@@ -28,23 +28,17 @@ public class Stock {
     @JsonProperty
     private String name;
     @JsonProperty
-    private List<Map<String, Double>> dailyClosePrices;
+    private List<HashMap<Object, Object>> dailyClosePrice;
 
-//    public Stock(String name) {
-//        this.name = name;
-//        this.dailyClosePrices = new Object();
-//    }
-//    public Stock (String name, Object dailyClosePrices) {
-//        this.name = name;
-//        this.dailyClosePrices = dailyClosePrices;
-//    }
+public Stock() {
 
+}
     /** Getters */
     public String getName () {
         return name;
     }
-    public Object getDailyClosePrices () {
-        return dailyClosePrices;
+    public List<HashMap<Object, Object>> getDailyClosePrice () {
+        return dailyClosePrice;
     }
 
     /** Setters */
@@ -52,8 +46,8 @@ public class Stock {
         this.name = name;
     }
 
-    public void setDailyClosePrices (List<Map<String, Double>> dailyClosePrices) {
-        this.dailyClosePrices = dailyClosePrices;
+    public void setDailyClosePrice (List<HashMap<Object, Object>> dailyClosePrice) {
+        this.dailyClosePrice = dailyClosePrice;
     }
 
     /** For local testing */

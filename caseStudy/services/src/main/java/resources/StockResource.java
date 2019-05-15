@@ -23,16 +23,17 @@ import utility.FileHelper;
 import pojo.*;
 import java.util.*;
 
-@Path("hello")
+@Path("stock")
 public class StockResource {
     // TODO - Add a @GET resource to get stock data
     // Your service should return data based on 3 inputs
     // Stock ticker, start date and end date
     @GET
-    @Path("ok")
+    @Path("info")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Stock> helloWorld() throws java.io.IOException {
+    public Stock helloWorld() throws java.io.IOException {
         List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
-        return stocks;
+        return stocks.get(0);
     }
 }
+
