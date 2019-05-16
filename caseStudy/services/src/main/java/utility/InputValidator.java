@@ -36,10 +36,25 @@ public class InputValidator {
 
     //get json --> validate -->
     public static List<Company> validateAllCompanies(List<Company> companyList) throws InvalidJsonInputException{
-        for (Company company: companyList ) {
+        for (Company company: companyList) {
             if (company.getNumberOfEmployees()<0){
                 throw new InvalidJsonInputException("Invalid Company Data");
             }
+            if (company.getIndustry() == null){
+                company.setIndustry("Not Available");
+            }
+            if (company.getHeadquartersStateOrCountry() == null){
+                company.setHeadquartersStateOrCountry("Not Available");
+            }
+
+            if (company.getHeadquartersCity() == null){
+                company.setHeadquartersCity("Not Available");
+            }
+
+            if (company.getSector() == null){
+                company.setSector("Not Available");
+            }
+
         }
         return companyList;
     }
