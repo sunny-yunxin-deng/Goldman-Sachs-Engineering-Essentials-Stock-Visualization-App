@@ -83,6 +83,14 @@ export default class CompanyInput extends React.Component {
          })
          .catch()
     }
+    
+    componentWillReceiveProps(props){
+      if(this.state.inputValue != props.ticker){
+          this.setState({
+              inputValue:props.ticker
+          })
+      }
+  }
 
     //handleChange(event) {
       //  if (event.length > 0) {
@@ -124,6 +132,9 @@ export default class CompanyInput extends React.Component {
               axios.get(`/api/company/${valuetype.value}`)
               .then( (response) => {
                 this.props.onChange(response.data._symbol)
+                this.setState({
+                  inputValue:response.data._symbol
+                })
               })
           }
       };
@@ -177,6 +188,7 @@ export default class CompanyInput extends React.Component {
                       options={this.state.companyList}
                       onInputChange={this.handleInputChange} 
                       onChange = {this.handleChange}
+                      value = {{label:this.state.inputValue, value:this.state.inputValue}}
                     />
                       {/* useful props if you decide to use react-bootstrap-typeahead
                         <Typeahead

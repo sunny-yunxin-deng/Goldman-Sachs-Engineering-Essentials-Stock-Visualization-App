@@ -114,7 +114,11 @@ export default class StockTicker extends React.Component {
     }
 
     componentWillReceiveProps(props){
-        
+        if(this.state.inputValue != props.ticker){
+            this.setState({
+                inputValue:props.ticker
+            })
+        }
     }
 
     //handleChange(event) {
@@ -155,6 +159,9 @@ export default class StockTicker extends React.Component {
       handleChange(valuetype,actionmeta) {
           if(actionmeta.action == "select-option"){
               this.props.onChange(valuetype.value)
+              this.setState({
+                  inputValue:valuetype.value
+              })
           }
       };
   
@@ -199,6 +206,7 @@ export default class StockTicker extends React.Component {
                       options={this.state.tickerList}
                       onInputChange={this.handleInputChange} 
                       onChange = {this.handleChange}
+                      value = {{label:this.state.inputValue, value:this.state.inputValue}}
                     />
                       {/* useful props if you decide to use react-bootstrap-typeahead
                         <Typeahead
