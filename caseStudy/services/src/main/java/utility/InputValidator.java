@@ -28,7 +28,9 @@ import java.util.List;
 public class InputValidator {
 
     // TODO - write a method that will validate your JSON input files
-
+    public boolean validateJSON() {
+        return true;
+    }
     // TODO - write a method that will validate the inputs to the Company Resource
 
 

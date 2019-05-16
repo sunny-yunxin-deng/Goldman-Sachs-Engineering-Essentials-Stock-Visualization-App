@@ -15,6 +15,7 @@
  */
 
 package resources;
+
 import utility.FileHelper;
 import pojo.Company;
 import utility.InputValidator;
@@ -28,18 +29,18 @@ import java.io.IOException;
 import java.util.List;
 import utility.InvalidJsonInputException;
 // TODO - add your @Path here
-@Path("companies")
+@Path("visual")
 public class CompanyResource {
 
     // TODO - Add a @GET resource to get company data
     // Your service should return data for a given stock ticker
     @GET
-    @Path("{symbol}/companyInfo")
+    @Path("/companyInfo/{symbol}")
     @Produces(MediaType.APPLICATION_JSON)
 
-    public Response getCompanyInfo(@PathParam("symbol") String symbol) throws IOException, InvalidJsonInputException{
+    public Response getCompanyInfo(@PathParam("symbol") String symbol) throws Exception{
         symbol = InputValidator.validateStockTicker(symbol);
-        List<Company> companies = FileHelper.readAllCompanies("/Users/yunxindeng/Desktop/Sophomore/Spring2019/Engineering Essentials/EngineeringEssentials/caseStudy/services/src/main/resources/data/companyInfo.json");
+        List<Company> companies = FileHelper.readAllCompanies("companyInfo.json");
         for(Company company: companies){
             if (company.getSymbol().equalsIgnoreCase(symbol)) {
                 return Response.ok().entity(company).build();

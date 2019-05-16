@@ -80,5 +80,4 @@ public class StarterApp extends Application<Configuration> {
 
         System.out.println("Go to localhost:8080/hello/ok in your browser.");
     }
-
 }

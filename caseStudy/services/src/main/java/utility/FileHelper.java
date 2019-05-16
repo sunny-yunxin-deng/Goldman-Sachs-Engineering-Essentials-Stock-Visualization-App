@@ -38,20 +38,20 @@ public class FileHelper {
     public static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final ObjectMapper mapper = new ObjectMapper();
 
-
-    public static List<Company> readAllCompanies(String fileName) throws IOException, InvalidJsonInputException {
-
-        InputStream inputStream = new FileInputStream(fileName);
+    public static List<Company> readAllCompanies(String fileName) throws Exception {
+        InputStream inputStream = new FileInputStream(("src/main/resources/data" + File.separatorChar + fileName));
         List<Company> companyList = mapper.readValue(inputStream, new TypeReference<List<Company>>(){});
         return InputValidator.validateAllCompanies(companyList);
     }
 
     public static List<Stock> readAllStocks(String fileName) throws IOException {
-
-        //       InputStream inputStream = new FileInputStream(("data" + File.separatorChar + fileName));
-        InputStream inputStream = new FileInputStream(fileName);
+        InputStream inputStream = new FileInputStream(("src/main/resources/data" + File.separatorChar + fileName));
         return mapper.readValue(inputStream, new TypeReference<List<Stock>>() {
         });
+    }
+
+    public static void writeStocksToFile(String fileName, Stock stock) throws IOException {
+        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("data", fileName), stock);
     }
 }
 
