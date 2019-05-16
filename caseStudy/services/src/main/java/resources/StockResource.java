@@ -37,10 +37,10 @@ public class StockResource {
         String[] outputB = b.split(delim2);
 
         if (outputA.length != 3) {
-            return -1;
+            return 1;
         }
         if (outputB.length != 3) {
-            return -1;
+            return 1;
         }
 
         if (Integer.parseInt(outputA[2]) < Integer.parseInt(outputB[2])) {
@@ -70,20 +70,22 @@ public class StockResource {
     // TODO - Add a @GET resource to get stock data
     // Your service should return data based on 3 inputs
     // Stock ticker, start date and end date
-    @GET // stock/info/ADBE/4_13_2019/4_15_2019
-    @Path("info/{tick}/{startDate}/{endDate}")
+    @GET
+    @Path("info")
     @Produces(MediaType.APPLICATION_JSON)
 
-    public TreeMap<String, Double> getStockData(@PathParam("tick") String tick,
-                              @PathParam("startDate") String startDate,
-                              @PathParam("endDate") String endDate) throws java.io.IOException {
+    public Response getStockData(@QueryParam("ticker") String tick,
+                              @QueryParam("startDate") String startDate,
+                              @QueryParam("endDate") String endDate) throws java.io.IOException {
 
 
         List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
-        LinkedHashMap<String, Double> dailyClosePriceMap = new LinkedHashMap<String, Double>();
+
+        HashMap<String, Double> readMap = new HashMap<String, Double>();
         for (Stock stock : stocks) {
             if(stock.getName().equalsIgnoreCase(tick)) {
-                dailyClosePriceMap = stock.getDailyClosePrice().get(0);
+                readMap = stock.getDailyClosePrice().get(0);
+
             }
         }
 
@@ -98,43 +100,35 @@ public class StockResource {
             // equals.
             public int compare(String a, String b) {
                 return myCompare(a, b, "/", "/");
-
-                /*
-                if (base.get(a) >= base.get(b)) {
-                    return -1;
-                } else {
-                    return 1;
-                } // returning 0 would merge keys */
             }
         }
 
-        //dailyClosePriceMap.put(startDate, 0.0);
-        //dailyClosePriceMap.put(endDate, 0.0);
-        for (String key : dailyClosePriceMap.keySet()) {
-            if (myCompare(startDate, key, "/", "-") > 0) {
-                dailyClosePriceMap.remove(key);
-            }
-            else if (myCompare(key, endDate, "-", "/") > 0) {
-                dailyClosePriceMap.remove(key);
+
+        if (startDate == null) {
+            startDate = "0-0-0000";
+        }
+        else if (startDate.length() < 1) {
+            startDate = "0-0-0000";
+        }
+
+        if (endDate == null) {
+            endDate = "13-35-99999";
+        }
+        else if (endDate.length() < 1) {
+            endDate = "13-35-99999";
+        }
+
+        HashMap<String, Double> dailyClosePriceMap = new HashMap<String, Double>();
+        for (String key : readMap.keySet()) {
+            if (myCompare(startDate, key, "/", "/") <= 0 && myCompare(key, endDate, "/", "/") <= 0) {
+                dailyClosePriceMap.put(key, readMap.get(key));
             }
         }
         ValueComparator bvc = new ValueComparator(dailyClosePriceMap);
         TreeMap<String, Double> sorted_map = new TreeMap<String, Double>(bvc);
         sorted_map.putAll(dailyClosePriceMap);
 
-        /*
-        for (String key : sorted_map.keySet()) {
-            if (myCompare(startDate, key, "-") > 0) {
-                sorted_map.remove(key);
-            }
-            else if (myCompare(key, endDate, "-") > 0) {
-                sorted_map.remove(key);
-            }
-        }*/
-        //sorted_map.put("1/3/13", 0.0);
-
-        return sorted_map;
-
+        return Response.ok().entity(sorted_map).build();
 
 
     }
