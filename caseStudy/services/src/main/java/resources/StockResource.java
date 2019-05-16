@@ -22,30 +22,39 @@ import javax.ws.rs.QueryParam;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import utility.FileHelper;
 import pojo.*;
 import java.util.*;
 
+
 @Path("stock")
 public class StockResource {
+
+
     // TODO - Add a @GET resource to get stock data
     // Your service should return data based on 3 inputs
     // Stock ticker, start date and end date
-    @GET
+    @GET // stock/info/ADBE/4_13_2019/4_15_2019
     @Path("info/{tick}/{startDate}/{endDate}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Double getStockData(@PathParam("tick") String tick,
+    public Response getStockData(@PathParam("tick") String tick,
                               @QueryParam("startDate") String startDate,
                               @QueryParam("endDate") String endDate) throws java.io.IOException {
 
         List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
-        List<HashMap<String, Double>> dailyClosePrice = new ArrayList<HashMap<String, Double>>();
+        HashMap<String, Double> dailyClosePriceMap = new HashMap<String, Double>();
         for (Stock stock : stocks) {
             if(stock.getName().equalsIgnoreCase(tick)) {
-                dailyClosePrice = stock.getDailyClosePrice();
+                dailyClosePriceMap = stock.getDailyClosePrice().get(0);
             }
         }
-        return dailyClosePrice.get(0).get("4/11/2019");
+        String[] dateSet = (String[]) dailyClosePriceMap.keySet().toArray();
+        List<String> dateList = pojo.Date.consecutiveListOfDates(startDate, endDate, dateSet);
+
+        return Response.ok().entity(dateList).build();
+//        return dateList;
     }
 }
 

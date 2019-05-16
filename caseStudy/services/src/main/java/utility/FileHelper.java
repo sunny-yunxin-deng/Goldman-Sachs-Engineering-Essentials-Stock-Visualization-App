@@ -48,5 +48,9 @@ public class FileHelper {
         return mapper.readValue(inputStream, new TypeReference<List<Stock>>() {
         });
     }
+
+    public static void writeStocksToFile(String fileName, Stock stock) throws IOException {
+        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("data", fileName), stock);
+    }
 }
 
