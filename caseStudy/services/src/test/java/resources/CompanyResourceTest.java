@@ -52,11 +52,11 @@ public class CompanyResourceTest extends JerseyTest {
 
     @Test
     public void testCorrectOutput(){
-        Company avti = target().path("companies/ATVI/companyInfo").request().get(Company.class);
-        Company akam = target().path("companies/AKAM/companyInfo").request().get(Company.class);
-        String response = target().path("companies/SSSS/companyInfo").request().get(String.class);
+        Company atvi = target().path("company/ATVI/").request().get(Company.class);
+        Company akam = target().path("company/AKAM/").request().get(Company.class);
+        String response = target().path("company/SSSS/").request().get(String.class);
 
-        assertEquals("Activision Blizzard Inc", avti.getName());
+        assertEquals("Activision Blizzard Inc", atvi.getName());
         assertEquals("Akamai Technologies Inc.", akam.getName());
         assertEquals(response, "No matches found for ticker SSSS");
 
