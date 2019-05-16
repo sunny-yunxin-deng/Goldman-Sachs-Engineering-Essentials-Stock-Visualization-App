@@ -63,7 +63,7 @@ export default class Date extends React.Component {
                      * This method should set the state to the date argument passed in the parameter.
                      *
                     */}
-                <p><strong>{this.props.text}</strong></p>
+                <pre>{this.props.text}</pre>
                 <DatePicker 
                     selected={this.state.date} 
                     onChange={this.handleChange} 

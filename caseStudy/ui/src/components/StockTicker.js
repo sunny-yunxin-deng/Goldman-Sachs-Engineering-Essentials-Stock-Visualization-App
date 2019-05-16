@@ -174,11 +174,13 @@ export default class StockTicker extends React.Component {
         return (
             <div className="stockticker">
                 <div className="ticker-input">
-                    <p><strong>Stock Ticker</strong></p>
+                    
                     <div className="stockticker-typeahead">
                     <pre>Stock Ticker: </pre>
                     <AsyncSelect
+                        placeholder='Search...'
                         cacheOptions
+                        backspaceRemovesValue={true}
                         loadOptions={this.promiseOptions}
                         defaultOptions={this.state.tickerList}
                         onInputChange={this.handleInputChange} />
@@ -196,6 +198,18 @@ export default class StockTicker extends React.Component {
                     </div>
                 </div>
                 {
+                  <div>
+                    <br></br>
+                      <div>
+                       <p><strong>Company: </strong></p>
+                       <p><strong>Ticker Symbol: </strong></p>
+                        <p><strong>City: </strong></p>
+                       <p><strong>State/Country: </strong></p>
+                       <p><strong>Sector: </strong></p>
+                       <p><strong>Industry: </strong></p>
+                       </div>
+                    </div>
+                    
                     /**
                      *  TODO
                      *  Create a div element that shows a company information when the ticker changes. You will need to use a conditional here

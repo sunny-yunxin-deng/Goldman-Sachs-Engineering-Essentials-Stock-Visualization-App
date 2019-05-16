@@ -57,6 +57,7 @@ export default class App extends React.Component{
                */}
                 <div className="date-range">
                   <Date text={"Start Date"} onChange={this.handleChange} />
+                  <p></p>
                   <Date text={"End Date"} onChange={this.handleChange} />
                 </div>
               </div>
