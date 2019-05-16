@@ -15,16 +15,43 @@
  */
 
 package utility;
+import pojo.Company;
+
+import java.util.List;
 
 /**
  * Utility class to validate inputs
  */
+
+
+
 public class InputValidator {
 
     // TODO - write a method that will validate your JSON input files
-
+    public boolean validateJSON() {
+        return true;
+    }
     // TODO - write a method that will validate the inputs to the Company Resource
 
+
     // TODO - write a method that will validate the inputs to the Stock Resource
+
+    //get json --> validate -->
+    public static List<Company> validateAllCompanies(List<Company> companyList) throws InvalidJsonInputException{
+        for (Company company: companyList ) {
+            if (company.getNumberOfEmployees()<0){
+                throw new InvalidJsonInputException("Invalid Company Data");
+            }
+        }
+        return companyList;
+    }
+
+    public static String validateStockTicker(String input) throws InvalidJsonInputException{
+        if (input == null){
+            throw new InvalidJsonInputException("Input Stock Ticker Cannot be Null");
+        }
+        return input;
+    }
+
 
 }
