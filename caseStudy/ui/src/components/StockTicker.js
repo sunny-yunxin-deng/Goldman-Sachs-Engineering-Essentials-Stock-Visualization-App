@@ -48,6 +48,7 @@
 
 import React from 'react';
 import AsyncSelect from 'react-select/lib/Async';
+import Select from 'react-select';
 import axios from 'axios';
 //import {Typeahead} from 'react-bootstrap-typeahead'; UNCOMMENT this line if you are using the react-bootstrap-typeeahead component
 
@@ -87,13 +88,7 @@ export default class StockTicker extends React.Component {
                 industry: ''
             },
             inputValue: "",
-            tickerList: [
-              {value: 'APPL', label: 'APPL'},
-              {value: 'AMZN', label: 'AMZN'},
-              {value: 'TWTR', label: 'TWTR'},
-              {value: 'GOGL', label: 'GOGL'},
-              {value: 'FB', label: 'FB'}
-            ]
+            tickerList: []
             /**
              * TODO
              * Add any additional state to pass via props to the typeahead component.
@@ -103,6 +98,20 @@ export default class StockTicker extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.filterTickers = this.filterTickers.bind(this);
         this.promiseOptions = this.promiseOptions.bind(this);
+    }
+
+    componentDidMount(){
+        axios.get("/stock/all")
+         .then((response) => {
+
+             this.setState(state => {
+                 response.data.forEach( (ticker) => {
+                     state.tickerList.push({value: ticker, label:ticker})
+                 })
+                 return state;
+             })
+         })
+         .catch()
     }
 
     //handleChange(event) {
@@ -131,7 +140,7 @@ export default class StockTicker extends React.Component {
    // }
 
     handleInputChange(newValue) {
-        console.log(newValue)
+        //console.log(newValue)
         const inputValue = newValue.replace(/\W/g, '');
 
         //this.props.onChange(newValue);
@@ -141,7 +150,6 @@ export default class StockTicker extends React.Component {
       };
   
       handleChange(valuetype,actionmeta) {
-          console.log(valuetype,actionmeta)
           if(actionmeta.action == "select-option"){
               this.props.onChange(valuetype.value)
           }
@@ -179,12 +187,21 @@ export default class StockTicker extends React.Component {
                 <div className="ticker-input">
                   <div className="stockticker-typeahead">
                   <pre>Stock Ticker: </pre>
-                    <AsyncSelect
+                    {/* <AsyncSelect
                       placeholder='Search...'
                       cacheOptions
                       backspaceRemovesValue={true}
                       loadOptions={this.promiseOptions}
                       defaultOptions={this.state.tickerList}
+                      onInputChange={this.handleInputChange} 
+                      onChange = {this.handleChange}
+                    /> */}
+                    <Select
+                      placeholder='Search...'
+                      cacheOptions
+                      backspaceRemovesValue={true}
+                      //loadOptions={this.promiseOptions}
+                      options={this.state.tickerList}
                       onInputChange={this.handleInputChange} 
                       onChange = {this.handleChange}
                     />
@@ -201,8 +218,7 @@ export default class StockTicker extends React.Component {
                       */}
                     </div>
                 </div>
-                {
-                  <div>
+                <div>
                     <br></br>
                       {this.state.showcompanyinfo && 
                       <div>
@@ -215,7 +231,7 @@ export default class StockTicker extends React.Component {
                       </div>
                       }
                     </div>
-                    
+                {
                     /**
                      *  TODO
                      *  Create a div element that shows a company information when the ticker changes. You will need to use a conditional here

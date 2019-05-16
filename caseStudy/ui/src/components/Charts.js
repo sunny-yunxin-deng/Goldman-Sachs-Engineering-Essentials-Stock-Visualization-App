@@ -36,6 +36,10 @@ export default class Charts extends React.Component {
         this.dataSourceHelper(nextProps);
     }
 
+    componentWillReceiveProps(props){
+        this.dataSourceHelper(props);
+    }
+
     dataSourceHelper(props) {
         props = props || this.props;
         
@@ -76,11 +80,22 @@ export default class Charts extends React.Component {
          *  Don't forget to bind the helper method in the constructor!
          * */
 
-        axios.get('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/usdeur.json')
+        //?startDate=${props.startDate.format('l')}&endDate=${props.endDate.format('l')}
+        console.log(props.ticker)
+        axios.get(`/stock/${props.ticker}`,{
+            params: {
+              startDate: props.startDate.format('l'),
+              endDate:   props.endDate.format('l')
+            }
+          })
         .then((response) => {
             // handle success
-            //console.log(response.data);
+            console.log(response)
+            console.log(response.data);
             this.setState({data:response.data})
+        })
+        .catch( (error) => {
+            console.log(error)
         })
     }
             

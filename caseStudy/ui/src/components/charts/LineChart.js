@@ -84,7 +84,7 @@ export default class LineChart extends React.Component {
                     type: 'spline'
                     },
                 title: {
-                    text: 'My chart'
+                    text: 'Stock Prices'
                     },
                 series: [
                     {
@@ -111,15 +111,28 @@ export default class LineChart extends React.Component {
          * to create the x-axis.
          */
         
-
+        
        // this.state.chart.series[0].setData(this.props.data);
-        this.setState({
-            options:{
-                series: [
-                    { data: props.data}
-                ]
-            }
-        })
+
+       if(props.data){
+            let data = []
+            Object.entries(props.data).forEach(([key, val]) => {
+                data.push({
+                    x: Date.parse(key),
+                    y: val,
+                    name:"price",
+                    color: "#00FF00"
+                })
+            });
+            console.log(data)
+            this.setState({
+                options:{
+                    series: [
+                        { data: data}
+                    ]
+                }
+            })
+       }
     }
 
     componentWillUnmount() {

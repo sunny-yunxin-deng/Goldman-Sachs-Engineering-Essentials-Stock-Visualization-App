@@ -37,7 +37,6 @@ export default class App extends React.Component{
       this.setState({
         [type]:value
       })
-      console.log(this.state)
     };
 
     render () {
@@ -73,7 +72,14 @@ export default class App extends React.Component{
                    *  be maintained as a state object.
                    *  http://reactpatterns.com/#conditional-rendering
                    */}
-                   <Charts />
+
+                   {this.state.ticker && this.state.startDate && this.state.endDate && 
+                     <Charts 
+                        ticker = {this.state.ticker}
+                        startDate = {this.state.startDate}
+                        endDate = {this.state.endDate}
+                      />
+                  }
 
             </div>
       );
