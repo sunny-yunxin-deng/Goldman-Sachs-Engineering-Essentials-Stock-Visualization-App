@@ -40,7 +40,7 @@ public class StockResource {
     @GET // stock/info/ADBE/4_13_2019/4_15_2019
     @Path("info/{tick}/{startDate}/{endDate}")
     @Produces(MediaType.APPLICATION_JSON)
-    public HashMap<String, Double> getStockData(@PathParam("tick") String tick,
+    public TreeMap<String, Double> getStockData(@PathParam("tick") String tick,
                               @PathParam("startDate") String startDate,
                               @PathParam("endDate") String endDate) throws java.io.IOException {
 
@@ -60,14 +60,66 @@ public class StockResource {
             endDate = "";
         }
 
+        class ValueComparator implements Comparator<String> {
+            Map<String, Double> base;
+
+            public ValueComparator(Map<String, Double> base) {
+                this.base = base;
+            }
+
+            // Note: this comparator imposes orderings that are inconsistent with
+            // equals.
+            public int compare(String a, String b) {
+                String[] outputA = a.split("/");
+                String[] outputB = b.split("/");
+
+                if (Integer.parseInt(outputA[2]) < Integer.parseInt(outputB[2])) {
+                    return -1;
+                }
+                else if (Integer.parseInt(outputA[2]) > Integer.parseInt(outputB[2])) {
+                    return 1;
+                }
+
+                if (Integer.parseInt(outputA[0]) < Integer.parseInt(outputB[0])) {
+                    return -1;
+                }
+                else if (Integer.parseInt(outputA[0]) > Integer.parseInt(outputB[0])) {
+                    return 1;
+                }
+
+                if (Integer.parseInt(outputA[1]) < Integer.parseInt(outputB[1])) {
+                    return -1;
+                }
+                else if (Integer.parseInt(outputA[1]) > Integer.parseInt(outputB[1])) {
+                    return 1;
+                }
+
+                return 1;
+
+                /*
+                if (base.get(a) >= base.get(b)) {
+                    return -1;
+                } else {
+                    return 1;
+                } // returning 0 would merge keys */
+            }
+        }
+
+        ValueComparator bvc = new ValueComparator(dailyClosePriceMap);
+        TreeMap<String, Double> sorted_map = new TreeMap<String, Double>(bvc);
+        sorted_map.putAll(dailyClosePriceMap);
+        return sorted_map;
+        /*
         String[] dateSet = new String[dailyClosePriceMap.keySet().size()];
         int counter = 0;
-        for (String key : dailyClosePriceMap.keySet()) {
+        /*for (String key : dailyClosePriceMap.keySet()) {
             dateSet[counter] = key;
             counter++;
-        }
-        //List<String> dateList = pojo.Date.consecutiveListOfDates(startDate, endDate, dateSet);
-return dailyClosePriceMap;
+        }*/
+
+        //ArrayList<String> dateList = pojo.Date.consecutiveListOfDates(startDate, endDate, dateSet);
+        //return dateList;
+        //return dailyClosePriceMap;
 //        return Response.ok().entity(dateList).build();
 //        return dateList;
     }
