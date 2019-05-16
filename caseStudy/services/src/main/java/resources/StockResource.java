@@ -32,7 +32,40 @@ import java.util.*;
 
 @Path("stock")
 public class StockResource {
+    public static int myCompare(String a, String b, String delim1, String delim2) {
+        String[] outputA = a.split(delim1);
+        String[] outputB = b.split(delim2);
 
+        if (outputA.length != 3) {
+            return -1;
+        }
+        if (outputB.length != 3) {
+            return -1;
+        }
+
+        if (Integer.parseInt(outputA[2]) < Integer.parseInt(outputB[2])) {
+            return -1;
+        }
+        else if (Integer.parseInt(outputA[2]) > Integer.parseInt(outputB[2])) {
+            return 1;
+        }
+
+        if (Integer.parseInt(outputA[0]) < Integer.parseInt(outputB[0])) {
+            return -1;
+        }
+        else if (Integer.parseInt(outputA[0]) > Integer.parseInt(outputB[0])) {
+            return 1;
+        }
+
+        if (Integer.parseInt(outputA[1]) < Integer.parseInt(outputB[1])) {
+            return -1;
+        }
+        else if (Integer.parseInt(outputA[1]) > Integer.parseInt(outputB[1])) {
+            return 1;
+        }
+
+        return 0;
+    }
 
     // TODO - Add a @GET resource to get stock data
     // Your service should return data based on 3 inputs
@@ -40,7 +73,8 @@ public class StockResource {
     @GET // stock/info/ADBE/4_13_2019/4_15_2019
     @Path("info/{tick}/{startDate}/{endDate}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStockData(@PathParam("tick") String tick,
+
+    public TreeMap<String, Double> getStockData(@PathParam("tick") String tick,
                               @PathParam("startDate") String startDate,
                               @PathParam("endDate") String endDate) throws java.io.IOException {
 
@@ -53,28 +87,55 @@ public class StockResource {
             }
         }
 
-        if (startDate == null) {
-            startDate = "";
-        }
-        if (endDate == null) {
-            endDate = "";
+        class ValueComparator implements Comparator<String> {
+            Map<String, Double> base;
+
+            public ValueComparator(Map<String, Double> base) {
+                this.base = base;
+            }
+
+            // Note: this comparator imposes orderings that are inconsistent with
+            // equals.
+            public int compare(String a, String b) {
+                return myCompare(a, b, "/", "/");
+
+                /*
+                if (base.get(a) >= base.get(b)) {
+                    return -1;
+                } else {
+                    return 1;
+                } // returning 0 would merge keys */
+            }
         }
 
-        String[] dateSet = new String[dailyClosePriceMap.keySet().size()];
-        int counter = 0;
+        //dailyClosePriceMap.put(startDate, 0.0);
+        //dailyClosePriceMap.put(endDate, 0.0);
         for (String key : dailyClosePriceMap.keySet()) {
-            dateSet[counter] = key;
-            counter++;
+            if (myCompare(startDate, key, "/", "-") > 0) {
+                dailyClosePriceMap.remove(key);
+            }
+            else if (myCompare(key, endDate, "-", "/") > 0) {
+                dailyClosePriceMap.remove(key);
+            }
         }
-        List<String> dateList = pojo.Date.consecutiveListOfDates(startDate, endDate, dateSet);
-        LinkedHashMap<String, Double> newDailyClosePrices = new LinkedHashMap<String, Double>();
-        for(String dateString : dateList) {
-            Double value = dailyClosePriceMap.get(dateString);
-            newDailyClosePrices.put(dateString, value);
-        }
+        ValueComparator bvc = new ValueComparator(dailyClosePriceMap);
+        TreeMap<String, Double> sorted_map = new TreeMap<String, Double>(bvc);
+        sorted_map.putAll(dailyClosePriceMap);
+
+        /*
+        for (String key : sorted_map.keySet()) {
+            if (myCompare(startDate, key, "-") > 0) {
+                sorted_map.remove(key);
+            }
+            else if (myCompare(key, endDate, "-") > 0) {
+                sorted_map.remove(key);
+            }
+        }*/
+        //sorted_map.put("1/3/13", 0.0);
+
+        return sorted_map;
 
 
-        return Response.ok().entity(newDailyClosePrices).build();
 
     }
 }
