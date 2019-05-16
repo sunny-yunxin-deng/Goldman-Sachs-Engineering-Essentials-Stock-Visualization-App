@@ -40,16 +40,16 @@ public class StockResource {
     @GET // stock/info/ADBE/4_13_2019/4_15_2019
     @Path("info/{tick}/{startDate}/{endDate}")
     @Produces(MediaType.APPLICATION_JSON)
-    public HashMap<String, Double> getStockData(@PathParam("tick") String tick,
+    public Response getStockData(@PathParam("tick") String tick,
                               @PathParam("startDate") String startDate,
                               @PathParam("endDate") String endDate) throws java.io.IOException {
 
+
         List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
-        HashMap<String, Double> dailyClosePriceMap = new HashMap<String, Double>();
+        LinkedHashMap<String, Double> dailyClosePriceMap = new LinkedHashMap<String, Double>();
         for (Stock stock : stocks) {
             if(stock.getName().equalsIgnoreCase(tick)) {
                 dailyClosePriceMap = stock.getDailyClosePrice().get(0);
-                //System.out.println(dailyClosePriceMap.toString());
             }
         }
 
@@ -66,10 +66,16 @@ public class StockResource {
             dateSet[counter] = key;
             counter++;
         }
-        //List<String> dateList = pojo.Date.consecutiveListOfDates(startDate, endDate, dateSet);
-return dailyClosePriceMap;
-//        return Response.ok().entity(dateList).build();
-//        return dateList;
+        List<String> dateList = pojo.Date.consecutiveListOfDates(startDate, endDate, dateSet);
+        LinkedHashMap<String, Double> newDailyClosePrices = new LinkedHashMap<String, Double>();
+        for(String dateString : dateList) {
+            Double value = dailyClosePriceMap.get(dateString);
+            newDailyClosePrices.put(dateString, value);
+        }
+
+
+        return Response.ok().entity(newDailyClosePrices).build();
+
     }
 }
 

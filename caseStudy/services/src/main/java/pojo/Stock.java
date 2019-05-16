@@ -20,6 +20,7 @@ package pojo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.*;
 
+
 /**
  * This class will define a company's end-of-day stock price
  * Look at resources/data/historicalStockData.json
@@ -28,7 +29,7 @@ public class Stock {
     @JsonProperty
     private String name;
     @JsonProperty
-    private List<HashMap<String, Double>> dailyClosePrice;
+    private List<LinkedHashMap<String, Double>> dailyClosePrice;
 
 public Stock() {
 
@@ -37,7 +38,7 @@ public Stock() {
     public String getName () {
         return name;
     }
-    public List<HashMap<String, Double>> getDailyClosePrice () {
+    public List<LinkedHashMap<String, Double>> getDailyClosePrice () {
         return dailyClosePrice;
     }
 
@@ -46,7 +47,7 @@ public Stock() {
         this.name = name;
     }
 
-    public void setDailyClosePrice (List<HashMap<String, Double>> dailyClosePrice) {
+    public void setDailyClosePrice (List<LinkedHashMap<String, Double>> dailyClosePrice) {
         this.dailyClosePrice = dailyClosePrice;
     }
 
