@@ -15,6 +15,7 @@
  */
 
 package resources;
+import javax.validation.constraints.Null;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -39,21 +40,35 @@ public class StockResource {
     @GET // stock/info/ADBE/4_13_2019/4_15_2019
     @Path("info/{tick}/{startDate}/{endDate}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStockData(@PathParam("tick") String tick,
-                              @QueryParam("startDate") String startDate,
-                              @QueryParam("endDate") String endDate) throws java.io.IOException {
+    public HashMap<String, Double> getStockData(@PathParam("tick") String tick,
+                              @PathParam("startDate") String startDate,
+                              @PathParam("endDate") String endDate) throws java.io.IOException {
 
         List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
         HashMap<String, Double> dailyClosePriceMap = new HashMap<String, Double>();
         for (Stock stock : stocks) {
             if(stock.getName().equalsIgnoreCase(tick)) {
                 dailyClosePriceMap = stock.getDailyClosePrice().get(0);
+                //System.out.println(dailyClosePriceMap.toString());
             }
         }
-        String[] dateSet = (String[]) dailyClosePriceMap.keySet().toArray();
-        List<String> dateList = pojo.Date.consecutiveListOfDates(startDate, endDate, dateSet);
 
-        return Response.ok().entity(dateList).build();
+        if (startDate == null) {
+            startDate = "";
+        }
+        if (endDate == null) {
+            endDate = "";
+        }
+
+        String[] dateSet = new String[dailyClosePriceMap.keySet().size()];
+        int counter = 0;
+        for (String key : dailyClosePriceMap.keySet()) {
+            dateSet[counter] = key;
+            counter++;
+        }
+        //List<String> dateList = pojo.Date.consecutiveListOfDates(startDate, endDate, dateSet);
+return dailyClosePriceMap;
+//        return Response.ok().entity(dateList).build();
 //        return dateList;
     }
 }
