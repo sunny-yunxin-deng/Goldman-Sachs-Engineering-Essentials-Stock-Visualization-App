@@ -30,7 +30,7 @@ import pojo.*;
 import java.util.*;
 
 
-@Path("visual")
+@Path("stock")
 public class StockResource {
     public static int myCompare(String a, String b, String delim1, String delim2) {
         String[] outputA = a.split(delim1);
@@ -72,7 +72,7 @@ public class StockResource {
     // Stock ticker, start date and end date
 
     @GET
-    @Path("stockInfo/allTickers")
+    @Path("all")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllTickers() throws Exception {
         List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
@@ -84,12 +84,12 @@ public class StockResource {
     }
 
     @GET
-    @Path("stockInfo/{ticker}/{startDate}/{endDate}")
+    @Path("{ticker}")
     @Produces(MediaType.APPLICATION_JSON)
 
     public Response getStockData(@PathParam("ticker") String tick,
-                              @PathParam("startDate") String startDate,
-                              @PathParam("endDate") String endDate) throws java.io.IOException {
+                              @QueryParam("startDate") String startDate,
+                              @QueryParam("endDate") String endDate) throws java.io.IOException {
 
         List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
 
@@ -131,7 +131,7 @@ public class StockResource {
 
         HashMap<String, Double> dailyClosePriceMap = new HashMap<String, Double>();
         for (String key : readMap.keySet()) {
-            if (myCompare(startDate, key, "-", "/") <= 0 && myCompare(key, endDate, "/", "-") <= 0) {
+            if (myCompare(startDate, key, "/", "/") <= 0 && myCompare(key, endDate, "/", "/") <= 0) {
                 dailyClosePriceMap.put(key, readMap.get(key));
             }
         }
