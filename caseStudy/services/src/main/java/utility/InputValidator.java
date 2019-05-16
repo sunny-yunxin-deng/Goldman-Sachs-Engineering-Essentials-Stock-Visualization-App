@@ -17,18 +17,13 @@
 package utility;
 import pojo.Company;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * Utility class to validate inputs
  */
 
-class InvalidJsonInputException extends Exception{
-    public InvalidJsonInputException(String s){
-        super(s);
-    }
-}
+
 
 public class InputValidator {
 
@@ -42,13 +37,20 @@ public class InputValidator {
     // TODO - write a method that will validate the inputs to the Stock Resource
 
     //get json --> validate -->
-    public List<Company> validateAllCompanies(List<Company> companyList) throws InvalidJsonInputException{
+    public static List<Company> validateAllCompanies(List<Company> companyList) throws InvalidJsonInputException{
         for (Company company: companyList ) {
             if (company.getNumberOfEmployees()<0){
                 throw new InvalidJsonInputException("Invalid Company Data");
             }
         }
         return companyList;
+    }
+
+    public static String validateStockTicker(String input) throws InvalidJsonInputException{
+        if (input == null){
+            throw new InvalidJsonInputException("Input Stock Ticker Cannot be Null");
+        }
+        return input;
     }
 
 
