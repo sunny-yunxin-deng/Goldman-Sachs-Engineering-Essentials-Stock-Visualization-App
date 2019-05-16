@@ -110,6 +110,20 @@ public class StockResource {
         //dailyClosePriceMap.put(startDate, 0.0);
         //dailyClosePriceMap.put(endDate, 0.0);
 
+        if (startDate == null) {
+            startDate = "0-0-0000";
+        }
+        else if (startDate.length() < 1) {
+            startDate = "0-0-0000";
+        }
+
+        if (endDate == null) {
+            endDate = "13-35-99999";
+        }
+        else if (endDate.length() < 1) {
+            endDate = "13-35-99999";
+        }
+
         HashMap<String, Double> dailyClosePriceMap = new HashMap<String, Double>();
         for (String key : readMap.keySet()) {
             if (myCompare(startDate, key, "-", "/") <= 0 && myCompare(key, endDate, "/", "-") <= 0) {
