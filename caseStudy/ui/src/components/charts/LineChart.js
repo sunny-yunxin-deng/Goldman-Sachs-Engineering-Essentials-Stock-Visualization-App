@@ -103,7 +103,7 @@ export default class LineChart extends React.Component {
 
     componentWillReceiveProps(props) {
         //console.log("New data received to redraw chart.");
-        
+
         /**
          * TODO
          * Parse the data received from props, a Javascript object, to map to a Javascript array
@@ -129,7 +129,6 @@ export default class LineChart extends React.Component {
 
     render() {
         const {options} = this.state
-        console.log("OPTiONS",options)
         return (
             <div id='chart'>
                 <HighchartsReact 

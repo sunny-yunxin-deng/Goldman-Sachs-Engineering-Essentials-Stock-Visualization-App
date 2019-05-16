@@ -20,32 +20,34 @@ import Charts from './components/Charts.js';
 import Date from './components/Date.js';
 import StockTicker from './components/StockTicker.js';
 
-
 export default class App extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+            
             /**
              * TODO
              * Add state objects for the user inputs and anything else you may need to render the highchart.
              */
         };
-        this.handleChange = this.handleChange.bind(this);
+        this.handleInput = this.handleInput.bind(this);
     }
 
-    handleChange(event) {
-      const value = event.target.value;
-      this.props.onChange(value);
-    }
+    handleInput(type,value) {
+      this.setState({
+        [type]:value
+      })
+      console.log(this.state)
+    };
 
     render () {
       return (
           <div className="page-display">
-            <h1>Stock Visualization App</h1>
+            <h1><strong>Stock Visualization App</strong></h1>
+            <br></br>
               <div className="input">
-              {
-              <StockTicker onChange={this.handleChange} />
-                /**
+              <StockTicker onChange={(value) => {this.handleInput("ticker",value)}} />
+              {/**
                * TODO
                * Render the StockTicker and Date components. You can use the date component twice
                * for both the start and end dates.
@@ -55,10 +57,10 @@ export default class App extends React.Component{
                * Don't forget to bind these methods!
                */}
                 <div className="date-range">
-                  {/* <Date onChange={this.handleChange} />
-                  <p>Start Date</p>
-                  <Date onChange={this.handleChange} />
-                  <p>End Date</p> */}
+                  <Date text={"Start Date"} onChange={(value) => {this.handleInput("startDate",value)}} />
+                </div>
+                <div className="date-range">
+                  <Date text={"End Date"} onChange={(value) => {this.handleInput("endDate",value)}} />
                 </div>
               </div>
 
@@ -73,7 +75,7 @@ export default class App extends React.Component{
                    */}
                    <Charts />
 
-          </div>
+            </div>
       );
     }
 }
