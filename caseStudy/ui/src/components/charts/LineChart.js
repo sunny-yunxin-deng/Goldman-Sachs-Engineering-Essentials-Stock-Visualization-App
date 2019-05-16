@@ -86,8 +86,25 @@ export default class LineChart extends React.Component {
                 title: {
                     text: 'Stock Prices'
                     },
+                xAxis:[{
+                    title:{
+                        text:"Date"
+                    },
+                    labels:{
+                        format:"{value: %b/%e/%Y}"
+                    }
+                }],
+                yAxis:[{
+                    title:{
+                        text:"Price"
+                    },
+                    // labels:{
+                    //     format:"{value: %b/%e/%Y}"
+                    // }
+                }],
                 series: [
                     {
+                        name:[this.props.ticker],
                         data: []
                     }
                 ]
@@ -128,7 +145,10 @@ export default class LineChart extends React.Component {
             this.setState({
                 options:{
                     series: [
-                        { data: data}
+                        { 
+                            name:[props.ticker],
+                            data: data
+                        }
                     ]
                 }
             })
