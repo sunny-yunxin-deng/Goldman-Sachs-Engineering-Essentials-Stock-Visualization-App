@@ -100,4 +100,21 @@ public class Company {
     public void setIndustry(String industry){
         _industry = industry;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Company)) return false;
+
+        Company company = (Company) o;
+
+        if (getIndustry() != company.getIndustry()) return false;
+        if (getSymbol() != company.getSymbol()) return false;
+        if (getSector() != company.getSector()) return false;
+        if (getNumberOfEmployees() != company.getNumberOfEmployees()) return false;
+        if (getHeadquartersCity() != company.getHeadquartersCity()) return false;
+        if (getName() != company.getName()) return false;
+        return getHeadquartersStateOrCountry() == company.getHeadquartersStateOrCountry();
+
+    }
 }

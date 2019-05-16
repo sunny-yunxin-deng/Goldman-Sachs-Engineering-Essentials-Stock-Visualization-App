@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pojo.Company;
 import pojo.Stock;
+import utility.InputValidator;
+import utility.InvalidJsonInputException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,12 +39,11 @@ public class FileHelper {
     private static final ObjectMapper mapper = new ObjectMapper();
 
 
-    public static List<Company> readAllCompanies(String fileName) throws IOException {
+    public static List<Company> readAllCompanies(String fileName) throws IOException, InvalidJsonInputException {
 
-        //       InputStream inputStream = new FileInputStream(("data" + File.separatorChar + fileName));
         InputStream inputStream = new FileInputStream(fileName);
-        return mapper.readValue(inputStream, new TypeReference<List<Company>>() {
-        });
+        List<Company> companyList = mapper.readValue(inputStream, new TypeReference<List<Company>>(){});
+        return InputValidator.validateAllCompanies(companyList);
     }
 
     public static List<Stock> readAllStocks(String fileName) throws IOException {
