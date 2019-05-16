@@ -55,10 +55,10 @@ export default class App extends React.Component{
                * Don't forget to bind these methods!
                */}
                 <div className="date-range">
-                  <Date onChange={this.handleChange} />
+                  {/* <Date onChange={this.handleChange} />
                   <p>Start Date</p>
                   <Date onChange={this.handleChange} />
-                  <p>End Date</p>
+                  <p>End Date</p> */}
                 </div>
               </div>
 

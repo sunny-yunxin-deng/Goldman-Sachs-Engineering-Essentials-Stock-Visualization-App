@@ -32,7 +32,7 @@ export default class Charts extends React.Component {
 
 
     componentWillMount(nextProps) {
-        console.log("Calling helper method to fetch data from service.");
+        //console.log("Calling helper method to fetch data from service.");
         this.dataSourceHelper(nextProps);
     }
 
@@ -79,7 +79,7 @@ export default class Charts extends React.Component {
         axios.get('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/usdeur.json')
         .then((response) => {
             // handle success
-            console.log(response);
+            console.log(response.data);
             this.setState({data:response.data})
         })
     }
@@ -89,6 +89,7 @@ export default class Charts extends React.Component {
          * TODO
          * Render your LineChart component and pass the data for the chart to display via props
          */
+        console.log(this.state.data)
         return(
             <LineChart  data = {this.state.data}/>
         );
