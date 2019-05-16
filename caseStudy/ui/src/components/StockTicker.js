@@ -137,6 +137,9 @@ export default class StockTicker extends React.Component {
       handleChange(event) {
         const value = event.target.value;
         this.props.onChange(value);
+        this.setState({
+          showcompanyinfo: true
+        });
       };
   
       filterTickers(inputValue) {
@@ -174,17 +177,16 @@ export default class StockTicker extends React.Component {
         return (
             <div className="stockticker">
                 <div className="ticker-input">
-                    
-                    <div className="stockticker-typeahead">
-                    <pre>Stock Ticker: </pre>
+                  <div className="stockticker-typeahead">
+                  <pre>Stock Ticker: </pre>
                     <AsyncSelect
-                        placeholder='Search...'
-                        cacheOptions
-                        backspaceRemovesValue={true}
-                        loadOptions={this.promiseOptions}
-                        defaultOptions={this.state.tickerList}
-                        onInputChange={this.handleInputChange} />
-                        {/* useful props if you decide to use react-bootstrap-typeahead
+                      placeholder='Search...'
+                      cacheOptions
+                      backspaceRemovesValue={true}
+                      loadOptions={this.promiseOptions}
+                      defaultOptions={this.state.tickerList}
+                      onInputChange={this.handleInputChange} />
+                      {/* useful props if you decide to use react-bootstrap-typeahead
                         <Typeahead
                              align=
                              filterBy=
@@ -194,20 +196,22 @@ export default class StockTicker extends React.Component {
                              placeholder="Company Name/Ticker"
                              options=
                         />
-                        */}
+                      */}
                     </div>
                 </div>
                 {
                   <div>
                     <br></br>
+                      {this.state.showcompanyinfo && 
                       <div>
-                       <p><strong>Company: </strong></p>
-                       <p><strong>Ticker Symbol: </strong></p>
-                        <p><strong>City: </strong></p>
-                       <p><strong>State/Country: </strong></p>
-                       <p><strong>Sector: </strong></p>
-                       <p><strong>Industry: </strong></p>
-                       </div>
+                      <p><strong>Company: </strong></p>
+                      <p><strong>Ticker Symbol: </strong></p>
+                      <p><strong>City: </strong></p>
+                      <p><strong>State/Country: </strong></p>
+                      <p><strong>Sector: </strong></p>
+                      <p><strong>Industry: </strong></p>
+                      </div>
+                      }
                     </div>
                     
                     /**

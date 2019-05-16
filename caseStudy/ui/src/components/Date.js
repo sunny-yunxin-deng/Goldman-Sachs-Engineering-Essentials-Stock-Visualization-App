@@ -34,17 +34,20 @@ export default class Date extends React.Component {
     constructor (props) {
         super(props)
         this.state = {
-            date: moment()
+            startDate: moment()
         };
-      //  this.onChange = this.onChange.bind(this);
+      this.handleChange = this.handleChange.bind(this);
+      this.componentDidMount = this.componentDidMount.bind(this);
     }
 
     componentDidMount() {
-        this.props.onChange(this.state.date);
+        this.props.onChange(this.state.startDate);
     }
 
     handleChange(date) {
-        this.props.onChange(date);
+        this.setState({
+        startDate: date
+        });
         /**
          * TODO
          * Set the state. Call this.props.onChange with the date argument
@@ -65,7 +68,7 @@ export default class Date extends React.Component {
                     */}
                 <pre>{this.props.text}</pre>
                 <DatePicker 
-                    selected={this.state.date} 
+                    selected={this.state.startDate} 
                     onChange={this.handleChange} 
                     dateFormat="MM/DD/YYYY"
                 />

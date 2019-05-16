@@ -24,8 +24,6 @@ export default class App extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            startDate: "",
-            endDate: "",
             
             /**
              * TODO
@@ -44,6 +42,7 @@ export default class App extends React.Component{
       return (
           <div className="page-display">
             <h1><strong>Stock Visualization App</strong></h1>
+            <br></br>
               <div className="input">
               <StockTicker onChange={this.handleChange} />
               {/**
@@ -57,7 +56,8 @@ export default class App extends React.Component{
                */}
                 <div className="date-range">
                   <Date text={"Start Date"} onChange={this.handleChange} />
-                  <p></p>
+                </div>
+                <div className="date-range">
                   <Date text={"End Date"} onChange={this.handleChange} />
                 </div>
               </div>
@@ -72,7 +72,7 @@ export default class App extends React.Component{
                    *  http://reactpatterns.com/#conditional-rendering
                    */}
 
-          </div>
+            </div>
       );
     }
 }
