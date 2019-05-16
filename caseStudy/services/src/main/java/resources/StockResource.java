@@ -67,6 +67,34 @@ public class StockResource {
         return 0;
     }
 
+//    @GET
+//    @Path("{ticker}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response getStockDataWithoutParams(@PathParam("ticker") String tick) throws java.io.IOException {
+//        List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
+//        HashMap<String, Double> readMap = new HashMap<String, Double>();
+//        for (Stock stock : stocks) {
+//            if(stock.getName().equalsIgnoreCase(tick)) {
+//                readMap = stock.getDailyClosePrice().get(0);
+//            }
+//        }
+//        class ValueComparator implements Comparator<String> {
+//            Map<String, Double> base;
+//            public ValueComparator(Map<String, Double> base) {
+//                this.base = base;
+//            }
+//            // Note: this comparator imposes orderings that are inconsistent with
+//            // equals.
+//            public int compare(String a, String b) {
+//                return myCompare(a, b, "/", "/");
+//            }
+//        }
+//        HashMap<String, Double> dailyClosePriceMap = new HashMap<String, Double>();
+//        ValueComparator bvc = new ValueComparator(dailyClosePriceMap);
+//        TreeMap<String, Double> sorted_map = new TreeMap<String, Double>(bvc);
+//        sorted_map.putAll(dailyClosePriceMap);
+//        return Response.ok().entity(sorted_map).build();
+//    }
     // TODO - Add a @GET resource to get stock data
     // Your service should return data based on 3 inputs
     // Stock ticker, start date and end date
@@ -86,7 +114,6 @@ public class StockResource {
     @GET
     @Path("{ticker}")
     @Produces(MediaType.APPLICATION_JSON)
-
     public Response getStockData(@PathParam("ticker") String tick,
                               @QueryParam("startDate") String startDate,
                               @QueryParam("endDate") String endDate) throws java.io.IOException {
@@ -116,17 +143,17 @@ public class StockResource {
 
 
         if (startDate == null) {
-            startDate = "0-0-0000";
+            startDate = "0/0/0000";
         }
         else if (startDate.length() < 1) {
-            startDate = "0-0-0000";
+            startDate = "0/0/0000";
         }
 
         if (endDate == null) {
-            endDate = "13-35-99999";
+            endDate = "13/35/99999";
         }
         else if (endDate.length() < 1) {
-            endDate = "13-35-99999";
+            endDate = "13/35/99999";
         }
 
         HashMap<String, Double> dailyClosePriceMap = new HashMap<String, Double>();
@@ -140,8 +167,6 @@ public class StockResource {
         sorted_map.putAll(dailyClosePriceMap);
 
         return Response.ok().entity(sorted_map).build();
-
-
     }
 }
 
