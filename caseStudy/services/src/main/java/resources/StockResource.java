@@ -37,10 +37,10 @@ public class StockResource {
         String[] outputB = b.split(delim2);
 
         if (outputA.length != 3) {
-            return -1;
+            return 1;
         }
         if (outputB.length != 3) {
-            return -1;
+            return 1;
         }
 
         if (Integer.parseInt(outputA[2]) < Integer.parseInt(outputB[2])) {
@@ -78,10 +78,10 @@ public class StockResource {
                               @PathParam("endDate") String endDate) throws java.io.IOException {
 
         List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
-        HashMap<String, Double> dailyClosePriceMap = new HashMap<String, Double>();
+        HashMap<String, Double> readMap = new HashMap<String, Double>();
         for (Stock stock : stocks) {
             if(stock.getName().equalsIgnoreCase(tick)) {
-                dailyClosePriceMap = stock.getDailyClosePrice().get(0);
+                readMap = stock.getDailyClosePrice().get(0);
                 //System.out.println(dailyClosePriceMap.toString());
             }
         }
@@ -109,12 +109,11 @@ public class StockResource {
 
         //dailyClosePriceMap.put(startDate, 0.0);
         //dailyClosePriceMap.put(endDate, 0.0);
-        for (String key : dailyClosePriceMap.keySet()) {
-            if (myCompare(startDate, key, "/", "-") > 0) {
-                dailyClosePriceMap.remove(key);
-            }
-            else if (myCompare(key, endDate, "-", "/") > 0) {
-                dailyClosePriceMap.remove(key);
+
+        HashMap<String, Double> dailyClosePriceMap = new HashMap<String, Double>();
+        for (String key : readMap.keySet()) {
+            if (myCompare(startDate, key, "-", "/") <= 0 && myCompare(key, endDate, "/", "-") <= 0) {
+                dailyClosePriceMap.put(key, readMap.get(key));
             }
         }
         ValueComparator bvc = new ValueComparator(dailyClosePriceMap);
