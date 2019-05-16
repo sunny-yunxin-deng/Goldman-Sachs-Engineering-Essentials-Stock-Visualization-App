@@ -16,6 +16,7 @@
 
 import React from 'react';
 import LineChart from './charts/LineChart';
+import axios from 'axios';
 
 export default class Charts extends React.Component {
     constructor(props) {
@@ -31,8 +32,12 @@ export default class Charts extends React.Component {
 
 
     componentWillMount(nextProps) {
-        console.log("Calling helper method to fetch data from service.");
+        //console.log("Calling helper method to fetch data from service.");
         this.dataSourceHelper(nextProps);
+    }
+
+    componentWillReceiveProps(props){
+        this.dataSourceHelper(props);
     }
 
     dataSourceHelper(props) {
@@ -74,15 +79,34 @@ export default class Charts extends React.Component {
          *
          *  Don't forget to bind the helper method in the constructor!
          * */
+
+        //?startDate=${props.startDate.format('l')}&endDate=${props.endDate.format('l')}
+        console.log(props.ticker)
+        axios.get(`/stock/${props.ticker}`,{
+            params: {
+              startDate: props.startDate.format('l'),
+              endDate:   props.endDate.format('l')
+            }
+          })
+        .then((response) => {
+            // handle success
+            console.log(response)
+            console.log(response.data);
+            this.setState({data:response.data})
+        })
+        .catch( (error) => {
+            console.log(error)
+        })
     }
-    
+            
     render() {
         /**
          * TODO
          * Render your LineChart component and pass the data for the chart to display via props
          */
+        
         return(
-            <LineChart />
+            <LineChart  data = {this.state.data}/>
         );
     }
 }

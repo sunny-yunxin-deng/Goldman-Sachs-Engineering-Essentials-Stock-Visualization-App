@@ -30,7 +30,7 @@ import pojo.*;
 import java.util.*;
 
 
-@Path("visual")
+@Path("stock")
 public class StockResource {
     public static int myCompare(String a, String b, String delim1, String delim2) {
         String[] outputA = a.split(delim1);
@@ -67,17 +67,56 @@ public class StockResource {
         return 0;
     }
 
+//    @GET
+//    @Path("{ticker}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response getStockDataWithoutParams(@PathParam("ticker") String tick) throws java.io.IOException {
+//        List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
+//        HashMap<String, Double> readMap = new HashMap<String, Double>();
+//        for (Stock stock : stocks) {
+//            if(stock.getName().equalsIgnoreCase(tick)) {
+//                readMap = stock.getDailyClosePrice().get(0);
+//            }
+//        }
+//        class ValueComparator implements Comparator<String> {
+//            Map<String, Double> base;
+//            public ValueComparator(Map<String, Double> base) {
+//                this.base = base;
+//            }
+//            // Note: this comparator imposes orderings that are inconsistent with
+//            // equals.
+//            public int compare(String a, String b) {
+//                return myCompare(a, b, "/", "/");
+//            }
+//        }
+//        HashMap<String, Double> dailyClosePriceMap = new HashMap<String, Double>();
+//        ValueComparator bvc = new ValueComparator(dailyClosePriceMap);
+//        TreeMap<String, Double> sorted_map = new TreeMap<String, Double>(bvc);
+//        sorted_map.putAll(dailyClosePriceMap);
+//        return Response.ok().entity(sorted_map).build();
+//    }
     // TODO - Add a @GET resource to get stock data
     // Your service should return data based on 3 inputs
     // Stock ticker, start date and end date
+
     @GET
-    @Path("stockInfo/{ticker}/{startDate}/{endDate}")
+    @Path("all")
     @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllTickers() throws Exception {
+        List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
+        List<String> ticks = new ArrayList<String>();
+        for (int i = 0; i < stocks.size(); i++) {
+            ticks.add(stocks.get(i).getName());
+        }
+        return Response.ok().entity(ticks).build();
+    }
 
+    @GET
+    @Path("{ticker}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getStockData(@PathParam("ticker") String tick,
-                              @PathParam("startDate") String startDate,
-                              @PathParam("endDate") String endDate) throws java.io.IOException {
-
+                              @QueryParam("startDate") String startDate,
+                              @QueryParam("endDate") String endDate) throws java.io.IOException {
 
         List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
 
@@ -85,7 +124,6 @@ public class StockResource {
         for (Stock stock : stocks) {
             if(stock.getName().equalsIgnoreCase(tick)) {
                 readMap = stock.getDailyClosePrice().get(0);
-
             }
         }
 
@@ -105,22 +143,22 @@ public class StockResource {
 
 
         if (startDate == null) {
-            startDate = "0-0-0000";
+            startDate = "0/0/0000";
         }
         else if (startDate.length() < 1) {
-            startDate = "0-0-0000";
+            startDate = "0/0/0000";
         }
 
         if (endDate == null) {
-            endDate = "13-35-99999";
+            endDate = "13/35/99999";
         }
         else if (endDate.length() < 1) {
-            endDate = "13-35-99999";
+            endDate = "13/35/99999";
         }
 
         HashMap<String, Double> dailyClosePriceMap = new HashMap<String, Double>();
         for (String key : readMap.keySet()) {
-            if (myCompare(startDate, key, "-", "/") <= 0 && myCompare(key, endDate, "/", "-") <= 0) {
+            if (myCompare(startDate, key, "/", "/") <= 0 && myCompare(key, endDate, "/", "/") <= 0) {
                 dailyClosePriceMap.put(key, readMap.get(key));
             }
         }
@@ -129,8 +167,6 @@ public class StockResource {
         sorted_map.putAll(dailyClosePriceMap);
 
         return Response.ok().entity(sorted_map).build();
-
-
     }
 }
 
