@@ -70,6 +70,19 @@ public class StockResource {
     // TODO - Add a @GET resource to get stock data
     // Your service should return data based on 3 inputs
     // Stock ticker, start date and end date
+
+    @GET
+    @Path("stockInfo/allTickers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllTickers() throws Exception {
+        List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
+        List<String> ticks = new ArrayList<String>();
+        for (int i = 0; i < stocks.size(); i++) {
+            ticks.add(stocks.get(i).getName());
+        }
+        return Response.ok().entity(ticks).build();
+    }
+
     @GET
     @Path("stockInfo/{ticker}/{startDate}/{endDate}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -78,14 +91,12 @@ public class StockResource {
                               @PathParam("startDate") String startDate,
                               @PathParam("endDate") String endDate) throws java.io.IOException {
 
-
         List<Stock> stocks = FileHelper.readAllStocks("historicalStockData.json");
 
         HashMap<String, Double> readMap = new HashMap<String, Double>();
         for (Stock stock : stocks) {
             if(stock.getName().equalsIgnoreCase(tick)) {
                 readMap = stock.getDailyClosePrice().get(0);
-
             }
         }
 
