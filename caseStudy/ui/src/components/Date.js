@@ -36,7 +36,7 @@ export default class Date extends React.Component {
         this.state = {
             date: moment()
         };
-        this.onChange = this.onChange.bind(this);
+      //  this.onChange = this.onChange.bind(this);
     }
 
     componentDidMount() {
@@ -55,7 +55,7 @@ export default class Date extends React.Component {
 
     render() {
         return (
-            <div> className="date" 
+            <div> 
                     {/*
                      * TODO
                      * Render the date picker component with a date format of "MM/DD/YYYY".
@@ -63,12 +63,12 @@ export default class Date extends React.Component {
                      * This method should set the state to the date argument passed in the parameter.
                      *
                     */}
+                <p><strong>{this.props.text}</strong></p>
                 <DatePicker 
                     selected={this.state.date} 
                     onChange={this.handleChange} 
                     dateFormat="MM/DD/YYYY"
                 />
-                <p><strong>{this.props.text}</strong></p>
                 <div className="date-input"> </div>
             </div>
         );
