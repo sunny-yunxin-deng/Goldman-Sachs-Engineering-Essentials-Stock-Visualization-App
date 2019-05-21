@@ -19,12 +19,16 @@ import './style/App.css';
 import Charts from './components/Charts.js';
 import Date from './components/Date.js';
 import StockTicker from './components/StockTicker.js';
+import CompanyInput from './components/CompanyInput';
+import axios from 'axios';
+import {Container} from 'reactstrap';
 
 export default class App extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            
+            showcompanyinfo:false,
+            companyInfo:{}
             /**
              * TODO
              * Add state objects for the user inputs and anything else you may need to render the highchart.
@@ -37,15 +41,28 @@ export default class App extends React.Component{
       this.setState({
         [type]:value
       })
+      if(type == "ticker" || type == "company"){
+        axios.get(`/api/company/${value}`)
+        .then((response) => {
+          this.setState({
+            companyInfo:response.data,
+            showcompanyinfo:true
+          })
+        })
+      }
     };
+
 
     render () {
       return (
-          <div className="page-display">
+          <div className="page-display centered">
+            
             <h1><strong>Stock Visualization App</strong></h1>
             <br></br>
-              <div className="input">
-              <StockTicker onChange={(value) => {this.handleInput("ticker",value)}} />
+              <div className="input centered">
+
+              <StockTicker onChange={(value) => {this.handleInput("ticker",value); }}  ticker = {this.state.ticker} />
+              <CompanyInput onChange={(value) => {this.handleInput("ticker",value)}}   ticker = {this.state.ticker}/>
               {/**
                * TODO
                * Render the StockTicker and Date components. You can use the date component twice
@@ -72,6 +89,17 @@ export default class App extends React.Component{
                    *  be maintained as a state object.
                    *  http://reactpatterns.com/#conditional-rendering
                    */}
+
+                    {this.state.showcompanyinfo && 
+                      <div>
+                      <p><strong>Company: </strong> {this.state.companyInfo._name ?  this.state.companyInfo._name : "Unavailable"} </p>
+                      <p><strong>Ticker Symbol: </strong> {this.state.companyInfo._symbol ?  this.state.companyInfo._symbol : "Unavailable"} </p>
+                      <p><strong>City: </strong> {this.state.companyInfo._headquartersCity ?  this.state.companyInfo._headquartersCity : "Unavailable"}</p>
+                      <p><strong>State/Country:  </strong>{this.state.companyInfo._headquartersStateOrCountry ? this.state.companyInfo._headquartersStateOrCountry  : "Unavailable"}</p>
+                      <p><strong>Sector: </strong> {this.state.companyInfo.sector ?  this.state.companyInfo.sector : "Unavailable"}</p>
+                      <p><strong>Industry: </strong>{this.state.companyInfo.industry ?  this.state.companyInfo.industry : "Unavailable"}</p>
+                      </div>
+                    }
 
                    {this.state.ticker && this.state.startDate && this.state.endDate && 
                      <Charts 

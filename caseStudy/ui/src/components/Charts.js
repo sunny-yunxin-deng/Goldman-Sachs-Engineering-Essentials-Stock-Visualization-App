@@ -82,7 +82,7 @@ export default class Charts extends React.Component {
 
         //?startDate=${props.startDate.format('l')}&endDate=${props.endDate.format('l')}
         console.log(props.ticker)
-        axios.get(`/stock/${props.ticker}`,{
+        axios.get(`api//stock/${props.ticker}`,{
             params: {
               startDate: props.startDate.format('l'),
               endDate:   props.endDate.format('l')
@@ -92,11 +92,15 @@ export default class Charts extends React.Component {
             // handle success
             console.log(response)
             console.log(response.data);
-            this.setState({data:response.data})
+            this.setState({
+                data:response.data,
+                ticker:props.ticker
+            })
         })
         .catch( (error) => {
             console.log(error)
         })
+
     }
             
     render() {
@@ -104,9 +108,8 @@ export default class Charts extends React.Component {
          * TODO
          * Render your LineChart component and pass the data for the chart to display via props
          */
-        
         return(
-            <LineChart  data = {this.state.data}/>
+            <LineChart  data = {this.state.data} ticker = {this.state.ticker}/>
         );
     }
 }

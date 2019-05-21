@@ -15,6 +15,13 @@
  */
 
 
+body {
+  text-align:center;
+ }
+
+.centered{
+  text-align:center;
+}
 .date {
   display: flex;
   flex-direction:row;

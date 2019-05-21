@@ -16,36 +16,6 @@
 
 
 
-
-/* Display a stock ticker that provides typeahead (aka autocomplete) capability.
- * This requires making an AJAX HTTP request (asynchronous JavaScript and XML request) to
- * your service and prefetching the list of all available stock tickers or making an async
- * query every time the input changes (AsyncTypeahead). If you don't have a route defined
- * in your services/API that returns all stock tickers as a JSON object, create one!
- *
- * You can use promises(axios),
- * fetch, jQuery...there are many libraries to help you do this. The data you will
- * receive will be in a JSON format.
- * https://hashnode.com/post/5-best-libraries-for-making-ajax-calls-in-react-cis8x5f7k0jl7th53z68s41k1
- * fetch: https://davidwalsh.name/fetch
- * axios: https://github.com/mzabriskie/axios (you will need to install this package)
- * jquery: http://api.jquery.com/jquery.getjson/ (you will need to install the jquery package)
- *
- * Feel free to choose among of the many open source options for your typeahead select box.
- * We recommend react-select or react-bootstrap-typeahead. react-boostrap-typeahead is included
- * in your package.json.
- *
- * react-select:
- * https://www.npmjs.com/package/react-select
- * http://jedwatson.github.io/react-select/
- * https://github.com/JedWatson/react-select
- * 
- * react-boostrap-typeahead
- * https://www.npmjs.com/package/react-bootstrap-typeahead
- * http://ericgio.github.io/react-bootstrap-typeahead/
- * https://github.com/ericgio/react-bootstrap-typeahead/blob/master/example/examples/BasicBehaviorsExample.react.js (note this is not ES2015)
- */
-
 import React from 'react';
 import AsyncSelect from 'react-select/lib/Async';
 import Select from 'react-select';
@@ -59,7 +29,7 @@ import axios from 'axios';
  */
 
  
-export default class StockTicker extends React.Component {
+export default class CompanyInput extends React.Component {
 
     /**
      * TODO
@@ -88,7 +58,7 @@ export default class StockTicker extends React.Component {
                 industry: ''
             },
             inputValue: "",
-            tickerList: []
+            companyList: []
             /**
              * TODO
              * Add any additional state to pass via props to the typeahead component.
@@ -97,29 +67,30 @@ export default class StockTicker extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.filterTickers = this.filterTickers.bind(this);
+        this.promiseOptions = this.promiseOptions.bind(this);
     }
 
     componentDidMount(){
-        axios.get("api/stock/all")
+        axios.get("/api/company/all")
          .then((response) => {
 
              this.setState(state => {
-                 response.data.forEach( (ticker) => {
-                     state.tickerList.push({value: ticker, label:ticker})
+                 response.data.forEach( (company) => {
+                     state.companyList.push({value: company, label:company})
                  })
                  return state;
              })
          })
          .catch()
     }
-
+    
     componentWillReceiveProps(props){
-        if(this.state.inputValue != props.ticker){
-            this.setState({
-                inputValue:props.ticker
-            })
-        }
-    }
+      if(this.state.inputValue != props.ticker){
+          this.setState({
+              inputValue:props.ticker
+          })
+      }
+  }
 
     //handleChange(event) {
       //  if (event.length > 0) {
@@ -158,9 +129,12 @@ export default class StockTicker extends React.Component {
   
       handleChange(valuetype,actionmeta) {
           if(actionmeta.action == "select-option"){
-              this.props.onChange(valuetype.value)
-              this.setState({
-                  inputValue:valuetype.value
+              axios.get(`/api/company/${valuetype.value}`)
+              .then( (response) => {
+                this.props.onChange(response.data._symbol)
+                this.setState({
+                  inputValue:response.data._symbol
+                })
               })
           }
       };
@@ -170,7 +144,15 @@ export default class StockTicker extends React.Component {
           i.label.toLowerCase().includes(inputValue.toLowerCase())
         );
       };
-
+  
+  
+      promiseOptions = (inputValue) => {
+          new Promise(resolve => {
+            setTimeout(() => {
+              resolve(this.filterTickers(inputValue));
+            }, 1000);
+          })
+        };
   
 
 
@@ -188,7 +170,7 @@ export default class StockTicker extends React.Component {
             <div className="stockticker">
                 <div className="ticker-input">
                   <div className="stockticker-typeahead">
-                  <pre>Stock Ticker: </pre>
+                  <pre>Company Name: </pre>
                     {/* <AsyncSelect
                       placeholder='Search...'
                       cacheOptions
@@ -203,7 +185,7 @@ export default class StockTicker extends React.Component {
                       cacheOptions
                       backspaceRemovesValue={true}
                       //loadOptions={this.promiseOptions}
-                      options={this.state.tickerList}
+                      options={this.state.companyList}
                       onInputChange={this.handleInputChange} 
                       onChange = {this.handleChange}
                       value = {{label:this.state.inputValue, value:this.state.inputValue}}
@@ -221,6 +203,19 @@ export default class StockTicker extends React.Component {
                       */}
                     </div>
                 </div>
+                <div>
+                    <br></br>
+                      {this.state.showcompanyinfo && 
+                      <div>
+                      <p><strong>Company: </strong></p>
+                      <p><strong>Ticker Symbol: </strong></p>
+                      <p><strong>City: </strong></p>
+                      <p><strong>State/Country: </strong></p>
+                      <p><strong>Sector: </strong></p>
+                      <p><strong>Industry: </strong></p>
+                      </div>
+                      }
+                    </div>
                 {
                     /**
                      *  TODO

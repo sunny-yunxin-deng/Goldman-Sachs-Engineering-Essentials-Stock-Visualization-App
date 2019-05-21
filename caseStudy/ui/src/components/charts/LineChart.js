@@ -18,6 +18,102 @@ import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official'
 
+
+export default class LineChart extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            options:{
+                chart: {
+                    type: 'spline'
+                    },
+                title: {
+                    text: 'Stock Prices'
+                    },
+                xAxis:[{
+                    title:{
+                        text:"Date"
+                    },
+                    labels:{
+                        format:"{value: %b/%e/%Y}"
+                    }
+                }],
+                yAxis:[{
+                    title:{
+                        text:"Price"
+                    },
+                    // labels:{
+                    //     format:"{value: %b/%e/%Y}"
+                    // }
+                }],
+                series: [
+                    {
+                        name:[this.props.ticker],
+                        data: []
+                    }
+                ]
+            },
+            nodata:!props.data
+        }
+        console.log(!this.props.data)
+
+    }
+
+    componentDidMount() {
+        //const chartRef = this.refs.chartComponent.chart;
+        //this.setState({options:options})
+    }
+
+    componentWillReceiveProps(props) {
+
+       if(props.data){
+            let data = []
+            Object.entries(props.data).forEach(([key, val]) => {
+                data.push({
+                    x: Date.parse(key),
+                    y: val,
+                    name:key,
+                    color: "#0000FF"
+                })
+            });
+            this.setState({
+                options:{
+                    series: [
+                        { 
+                            name:[props.ticker],
+                            data: data
+                        }
+                    ]
+                },
+                nodata:false
+            })
+       }
+       else{
+           this.setState({
+               nodata:true
+           })
+       }
+    }
+
+    componentWillUnmount() {
+        //this.state.chart.destroy();
+    }
+
+
+    render() {
+        const {options} = this.state
+        return (
+            <div id='chart'>
+                <HighchartsReact 
+                    highcharts={Highcharts}
+                    options={options}
+                />
+                {/* {this.state.nodata && <h1> No data available for these dates :(</h1> } */}
+            </div>
+        )
+    }
+}
+
 // const options = {
 //     chart: {
 //         zoomType: 'x'
@@ -73,94 +169,3 @@ import HighchartsReact from 'highcharts-react-official'
 //         data: null
 //     }]
 // }
-
-
-export default class LineChart extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            options:{
-                chart: {
-                    type: 'spline'
-                    },
-                title: {
-                    text: 'Stock Prices'
-                    },
-                series: [
-                    {
-                        data: []
-                    }
-                ]
-            }
-        }
-
-    }
-
-    componentDidMount() {
-        //const chartRef = this.refs.chartComponent.chart;
-        //this.setState({options:options})
-    }
-
-    componentWillReceiveProps(props) {
-        //console.log("New data received to redraw chart.");
-
-        /**
-         * TODO
-         * Parse the data received from props, a Javascript object, to map to a Javascript array
-         * required by the type of line chart chosen and set it in the series. Use Date.UTC(..)
-         * to create the x-axis.
-         */
-        
-        
-       // this.state.chart.series[0].setData(this.props.data);
-
-       if(props.data){
-            let data = []
-            Object.entries(props.data).forEach(([key, val]) => {
-                data.push({
-                    x: Date.parse(key),
-                    y: val,
-                    name:"price",
-                    color: "#00FF00"
-                })
-            });
-            console.log(data)
-            this.setState({
-                options:{
-                    series: [
-                        { data: data}
-                    ]
-                }
-            })
-       }
-    }
-
-    componentWillUnmount() {
-        //this.state.chart.destroy();
-    }
-
-
-    render() {
-        const {options} = this.state
-        return (
-            <div id='chart'>
-                <HighchartsReact 
-                    highcharts={Highcharts}
-                    options={options}
-                />
-            </div>
-        )
-    }
-}
-
-/*        Highcharts.chart('chart', {
-
-            TODO
-            Create a highcharts line chart of your choosing (e.g. https://www.highcharts.com/demo/line-time-series for a demo).
-
-            series: [{
-                name: 'Prices',
-                data: this.props.data
-            }]
-        });
-*/
